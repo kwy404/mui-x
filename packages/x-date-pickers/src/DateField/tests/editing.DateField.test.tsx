@@ -819,6 +819,18 @@ describe('<DateField /> - Editing', () => {
         expect(onChange.mock.lastCall?.[0]).toEqualDateTime(new Date(2009, 10, 25, 3, 3, 3));
       });
 
+      it('should not loose time information when editing the week day section', async () => {
+        const onChange = vi.fn();
+        const view = renderWithProps({
+          format: `${adapter.formats.weekday} ${adapter.formats.keyboardDate}`,
+          defaultValue: adapter.date('2010-04-07T03:03:03'),
+          onChange,
+        });
+        await view.selectSection('weekDay');
+        await view.user.keyboard('{ArrowUp}');
+        expect(onChange.mock.lastCall?.[0]).toEqualDateTime(new Date(2010, 3, 8, 3, 3, 3));
+      });
+
       it('should not loose date information when using the year format and value is provided', async () => {
         const onChange = vi.fn();
 
